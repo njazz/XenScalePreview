@@ -11,3 +11,11 @@
 "Extension Settings…" = "扩展设置…";
 "Reset Quick Look" = "重置 Quick Look";
 "Quit" = "退出";
+"Open File…" = "打开文件…";
+"Open Folder…" = "打开文件夹…";
+"Close" = "关闭";
+"Folder" = "文件夹";
+"Refresh" = "刷新";
+"Choose a folder to browse its scales." = "选择文件夹以浏览其中的音阶。";
+"No scale files (.scl) in this folder." = "此文件夹中没有 .scl 文件。";
+"Open a scale file or a folder, or drop one here." = "打开音阶文件或文件夹，或将其拖到此处。";

@@ -39,7 +39,7 @@ Install XcodeGen with `brew install xcodegen`.
 
 | Option | Default | Purpose |
 | --- | --- | --- |
-| `BUNDLE_ID=com.you.xen-scale-preview` | `local.xen-scale-preview` | App bundle ID; the extension gets `<id>.quicklook` |
+| `BUNDLE_ID=com.you.xen-scale-preview` | `com.alexnadzharov.xenscalepreview` | App bundle ID; the extension gets `<id>.quicklook` |
 | `VERSION=1.0.0` | `1.0` | Version shown in Finder / App Store |
 | `TEAM_ID=ABCDE12345` | none | Apple Developer team, required for `--archive` |
 | `EXPORT_METHOD=…` | `developer-id` (macOS), `development` (iOS) | Also `app-store-connect`, `mac-application`, `release-testing` |
@@ -87,21 +87,41 @@ For the App Store see [AppStore/README.md](AppStore/README.md): listing draft, r
 swift run scl2html Examples/31-EDO.scl > /tmp/s.html && open /tmp/s.html
 ```
 
-Quick Look runs no JavaScript in HTML previews, so everything (wheel, keyboard, highlighting) is static
-HTML and SVG generated in Swift. What you see in Safari is what Quick Look shows.
+The wheel, keyboard and highlighting are static HTML and SVG generated in Swift, so what you see in Safari is what
+Quick Look shows. The preview page also has a small sine synth (below). `scl2html` prints the static page without it.
+
+## The app: viewer and synth
+
+Quick Look previews are static: they can't play sound, and on macOS they don't forward clicks. So the playable part
+lives in the app. Open the app and use the folder button for a sidebar of the `.scl` files in a folder (subfolders
+included), or open a single file; drop a file or folder on the window, or use Quick Look's "Open with" button
+(macOS) or the share sheet's "Open in…" (iOS). The close button returns to the start screen.
+
+Above the keyboard, on the right: an audio switch (on by default), an octave stepper (-4 to +4) and a tuning box
+(the frequency of A4, 440 Hz by default; 100 to 2000). Clicking or touching a key plays its pitch; several keys or fingers
+play together, and sliding across keys plays them in turn. Only the keyboard triggers sound. It is plain Web Audio in
+the page (`Sources/SclCore/Synth.swift`): one sine oscillator per pitch, 100 ms fade in and out. 1/1 is the keyboard's
+C: middle C at octave 0, nine semitones below A4, so with a 12-tone scale the A key sounds the reference. Each octave
+step is a real 2:1 octave. The app remembers octave and tuning across scales. On iOS the app plays through the
+playback audio session, so the silent switch doesn't mute it. While a file loads, a spinner covers the preview.
+
+`Sources/ViewerUI` is the window, shared by both apps; the app targets are thin wrappers around it. macOS remembers the
+last folder through a security-scoped bookmark; iOS does the same with a plain bookmark.
 
 ## Layout
 
 ```
-Package.swift                                    SwiftPM: SclCore library + macOS executables
+Package.swift                                    SwiftPM: SclCore + ViewerUI libraries, macOS executables
 project.yml                                      XcodeGen spec: iOS + macOS app and extension targets
 Sources/
   SclCore/Scl.swift                              .scl parser + HTML/SVG renderer (all the real logic)
-  XenScalePreviewExtension/PreviewProvider.swift Quick Look extension, shared by macOS and iOS
+  SclCore/Synth.swift, L10n.swift                synth strip + script, preview-page translations
+  ViewerUI/                                      app window: sidebar, folder scan, web view, open/close (iOS + macOS)
+  XenScalePreviewExtension/PreviewProvider.swift Quick Look extension (static page), shared by macOS and iOS
   XenScalePreviewExtension/main.swift            SwiftPM only: calls NSExtensionMain (no .appex product type)
-  XenScalePreview/App.swift                      macOS host app: registers the extension, shows status
+  XenScalePreview/App.swift                      macOS app (thin wrapper around ViewerUI)
   scl2html/main.swift                            command-line tool for testing
-iOS/App.swift                                    iOS host app: info screen + open-a-file preview
+iOS/App.swift                                    iOS app (thin wrapper around ViewerUI)
 Bundle/                                          Info.plists, entitlements, privacy manifest, macOS AppIcon.iconset
 AppStore/  Tools/  PRIVACY.md                    store checklist, screenshot sizing tool, privacy policy
 Localization/App/                                host-app strings, one <lang>.lproj each
@@ -143,7 +163,7 @@ and that line is underlined in the source view.
 - **No preview on macOS:** open the app and click **Reset Quick Look**. Then check that **Xen Scale Preview** is
   turned on under Quick Look in System Settings › Extensions (the app's **Extension Settings…** button).
 - **Plain-text preview instead of the wheel:** run `mdls -name kMDItemContentType file.scl` (macOS). It should
-  print `local.xen-scale-preview.scl`. If another app (a synth, a tuning tool, a code previewer) has claimed `.scl`
+  print `com.alexnadzharov.xenscalepreview.scl`. If another app (a synth, a tuning tool, a code previewer) has claimed `.scl`
   under a different identifier, add that identifier to `QLSupportedContentTypes` in `Bundle/Extension-Info.plist`
   and rebuild.
 - **No preview on iOS:** the file type must not conform to `public.plain-text`, or iOS can pick its built-in text
@@ -151,7 +171,7 @@ and that line is underlined in the source view.
   system-owned file types are reportedly skipped, so keep the custom type. Reinstalling the app makes iOS
   re-register the extension.
 - **Works on one iOS device but not another, or the in-app preview works but Files shows plain text:** open the file with
-  **Open…** in the app and read the **File type** line at the bottom. If it isn't `local.xen-scale-preview.scl`, another
+  **Open…** in the app and read the **File type** line at the bottom. If it isn't `com.alexnadzharov.xenscalepreview.scl`, another
   app has claimed `.scl`. Add that identifier to `QLSupportedContentTypes` in `Bundle/Extension-Info.plist`, rebuild, and
   reinstall. Also compare iOS versions: see the iOS 27 note above.
 - **Is the extension registered (macOS)?** `pluginkit -mv -p com.apple.quicklook.preview | grep -i xen`

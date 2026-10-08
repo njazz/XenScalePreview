@@ -12,7 +12,7 @@ cd "$(dirname "$0")"
 
 APP=XenScalePreview
 EXT=XenScalePreviewExtension
-BUNDLE_ID="${BUNDLE_ID:-local.xen-scale-preview}"
+BUNDLE_ID="${BUNDLE_ID:-com.alexnadzharov}"
 EXT_ID="$BUNDLE_ID.quicklook"
 DEST="${DEST:-$HOME/Applications}"
 INSTALLED="$DEST/$APP.app"

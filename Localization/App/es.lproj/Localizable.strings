@@ -11,3 +11,11 @@
 "Extension Settings…" = "Ajustes de la extensión…";
 "Reset Quick Look" = "Restablecer Quick Look";
 "Quit" = "Salir";
+"Open File…" = "Abrir archivo…";
+"Open Folder…" = "Abrir carpeta…";
+"Close" = "Cerrar";
+"Folder" = "Carpeta";
+"Refresh" = "Actualizar";
+"Choose a folder to browse its scales." = "Elige una carpeta para explorar sus escalas.";
+"No scale files (.scl) in this folder." = "No hay archivos de escala (.scl) en esta carpeta.";
+"Open a scale file or a folder, or drop one here." = "Abre un archivo de escala o una carpeta, o suéltalo aquí.";

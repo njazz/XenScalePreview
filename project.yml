@@ -34,7 +34,7 @@ targets:
     dependencies:
       - target: XenScalePreviewExtension-iOS
       - package: XenScalePreview
-        product: SclCore
+        product: ViewerUI
     settings:
       base:
         PRODUCT_NAME: XenScalePreview
@@ -69,6 +69,8 @@ targets:
       - path: Bundle/PrivacyInfo.xcprivacy
     dependencies:
       - target: XenScalePreviewExtension-macOS
+      - package: XenScalePreview
+        product: ViewerUI
     settings:
       base:
         PRODUCT_NAME: XenScalePreview

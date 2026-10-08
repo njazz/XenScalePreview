@@ -6,5 +6,11 @@
 	<true/>
 	<key>com.apple.security.files.user-selected.read-only</key>
 	<true/>
+	<!-- remember the folder picked for the sidebar across launches -->
+	<key>com.apple.security.files.bookmarks.app-scope</key>
+	<true/>
+	<!-- WebKit's web content process needs this in a sandboxed app, even though the page loads nothing remote -->
+	<key>com.apple.security.network.client</key>
+	<true/>
 </dict>
 </plist>

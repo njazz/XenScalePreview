@@ -28,7 +28,7 @@
 			<true/>
 			<key>QLSupportedContentTypes</key>
 			<array>
-				<string>local.xen-scale-preview.scl</string>
+				<string>com.alexnadzharov.xenscalepreview.scl</string>
 			</array>
 			<key>QLSupportsSearchableItems</key>
 			<false/>

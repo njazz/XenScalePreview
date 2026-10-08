@@ -8,7 +8,7 @@
 #
 # Env overrides:
 #   TEAM_ID=…            Apple Developer team ID (required for --archive)
-#   BUNDLE_ID=com.you.xen-scale-preview   app bundle ID (default local.xen-scale-preview); the extension gets ".quicklook"
+#   BUNDLE_ID=com.you.xen-scale-preview   app bundle ID (default com.alexnadzharov.xenscalepreview); the extension gets ".quicklook"
 #   VERSION=1.2.0        marketing + build version (default 1.0)
 #   EXPORT_METHOD=…      development (default), release-testing, or app-store-connect (for TestFlight / App Store)
 set -euo pipefail
@@ -23,7 +23,7 @@ esac
 
 [[ "$(uname)" == Darwin ]] || { echo "This script runs on macOS only." >&2; exit 1; }
 command -v xcodebuild >/dev/null || { echo "xcodebuild not found. Install Xcode." >&2; exit 1; }
-export BUNDLE_ID="${BUNDLE_ID:-local.xen-scale-preview}" VERSION="${VERSION:-1.0}" TEAM_ID="${TEAM_ID:-}"
+export BUNDLE_ID="${BUNDLE_ID:-com.alexnadzharov.xenscalepreview}" VERSION="${VERSION:-1.0.0}" TEAM_ID="${TEAM_ID:-}"
 PROJ=XenScalePreview.xcodeproj
 SCHEME=XenScalePreview-iOS
 

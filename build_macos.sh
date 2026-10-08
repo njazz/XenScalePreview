@@ -10,7 +10,7 @@
 #
 # Env overrides:
 #   SIGN_ID="Developer ID Application: …"   signing identity (default "-" = ad-hoc)
-#   BUNDLE_ID=com.yourdomain.xen-scale-preview   app bundle ID (default local.xen-scale-preview);
+#   BUNDLE_ID=com.yourdomain.xen-scale-preview   app bundle ID (default com.alexnadzharov.xenscalepreview);
 #                                           the extension gets "$BUNDLE_ID.quicklook"
 #   VERSION=1.2.0                           CFBundleShortVersionString/CFBundleVersion (default 1.0)
 #   TEAM_ID, EXPORT_METHOD                  --archive only; EXPORT_METHOD is developer-id (default),
@@ -22,10 +22,10 @@ cd "$(dirname "$0")"
 
 APP=XenScalePreview
 EXT=XenScalePreviewExtension
-BUNDLE_ID="${BUNDLE_ID:-local.xen-scale-preview}"
+BUNDLE_ID="${BUNDLE_ID:-com.alexnadzharov.xenscalepreview}"
 EXT_ID="$BUNDLE_ID.quicklook"
 SIGN_ID="${SIGN_ID:--}"
-VERSION="${VERSION:-1.0}"
+VERSION="${VERSION:-1.0.0}"
 ZIP="dist/$APP.zip"
 
 [[ "$(uname)" == Darwin ]] || { echo "This script runs on macOS only." >&2; exit 1; }
