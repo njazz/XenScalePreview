@@ -1,0 +1,51 @@
+# Builds the universal macOS app and the iOS Simulator app on every push/PR, and attaches
+# XenScalePreview.zip (macOS) to the GitHub release when you push a tag like v1.0.0.
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write # needed to attach the zip to a release
+
+jobs:
+  macos:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parser smoke test
+        run: swift run -c release scl2html Examples/12-TET.scl | grep -q "12 equal"
+
+      - name: Build app (universal, ad-hoc signed)
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then VERSION="${GITHUB_REF_NAME#v}"; else VERSION=0.0.0; fi
+          UNIVERSAL=1 VERSION="$VERSION" ./build_macos.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: XenScalePreview-macOS
+          path: dist/XenScalePreview.zip
+
+      - name: Attach to release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/XenScalePreview.zip
+
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Build for the iOS Simulator (unsigned)
+        run: ./build_ios.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: XenScalePreview-iOS-Simulator
+          path: dist/XenScalePreview-iOS-Simulator.zip

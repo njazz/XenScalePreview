@@ -1,0 +1,13 @@
+/* Xen Scale Preview: host app strings (iOS and macOS). Keys are shared; unused ones are harmless. */
+"Quick Look previews for Scala scale files (.scl): a pitch wheel, a one-period keyboard, the degrees and the source." = "Quick-Look-Vorschau für Scala-Skalendateien (.scl): ein Tonhöhenrad, eine Tastatur über eine Periode, die Stufen und der Quelltext.";
+"Open a scale in Files, Mail or Messages and tap it, or press and hold and choose Preview. The extension runs on its own, so you can close this app." = "Öffne eine Skala in Dateien, Mail oder Nachrichten und tippe darauf, oder halte sie gedrückt und wähle „Vorschau“. Die Erweiterung läuft eigenständig, du kannst diese App also schließen.";
+"If a file still opens as plain text, make sure no other app has claimed .scl, then reinstall this app." = "Wenn eine Datei weiterhin als reiner Text geöffnet wird, stelle sicher, dass keine andere App .scl für sich beansprucht, und installiere diese App neu.";
+"Open…" = "Öffnen…";
+"File type: %@" = "Dateityp: %@";
+"Quick Look previews for Scala scale files (.scl). Select one in Finder and press Space." = "Quick-Look-Vorschau für Scala-Skalendateien (.scl). Wähle im Finder eine Datei aus und drücke die Leertaste.";
+"Quick Look extension is registered" = "Quick-Look-Erweiterung ist registriert";
+"Quick Look extension is not registered yet" = "Quick-Look-Erweiterung ist noch nicht registriert";
+"You can quit this app now. Keep it installed, though: the extension lives inside it. If previews don't appear, turn on “Xen Scale Preview” under Quick Look in System Settings › Extensions, then click Reset Quick Look." = "Du kannst diese App jetzt beenden. Lass sie aber installiert: Die Erweiterung ist Teil davon. Wenn keine Vorschau erscheint, aktiviere „Xen Scale Preview“ unter „Quick Look“ in Systemeinstellungen › Erweiterungen und klicke dann auf „Quick Look zurücksetzen“.";
+"Extension Settings…" = "Erweiterungseinstellungen…";
+"Reset Quick Look" = "Quick Look zurücksetzen";
+"Quit" = "Beenden";

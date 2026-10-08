@@ -1,0 +1,18 @@
+! ji-5-limit.scl
+!
+! A common 5-limit just intonation chromatic scale.
+Just intonation, 5-limit, 12 notes
+ 12
+!
+ 16/15   ! minor second
+ 9/8     ! major whole tone
+ 6/5     ! minor third
+ 5/4     ! major third
+ 4/3     ! perfect fourth
+ 45/32   ! augmented fourth
+ 3/2     ! perfect fifth
+ 8/5     ! minor sixth
+ 5/3     ! major sixth
+ 9/5     ! minor seventh
+ 15/8    ! major seventh
+ 2/1     ! octave

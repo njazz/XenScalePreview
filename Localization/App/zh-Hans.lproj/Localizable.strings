@@ -1,0 +1,13 @@
+/* Xen Scale Preview: host app strings (iOS and macOS). Keys are shared; unused ones are harmless. */
+"Quick Look previews for Scala scale files (.scl): a pitch wheel, a one-period keyboard, the degrees and the source." = "为 Scala 音阶文件（.scl）提供 Quick Look 预览：音高轮、一个周期的键盘、音级和源文件。";
+"Open a scale in Files, Mail or Messages and tap it, or press and hold and choose Preview. The extension runs on its own, so you can close this app." = "在“文件”“邮件”或“信息”中打开音阶并轻点，或长按后选择“预览”。扩展会独立运行，因此可以关闭此 App。";
+"If a file still opens as plain text, make sure no other app has claimed .scl, then reinstall this app." = "如果文件仍以纯文本打开，请确认没有其他 App 占用了 .scl，然后重新安装此 App。";
+"Open…" = "打开…";
+"File type: %@" = "文件类型：%@";
+"Quick Look previews for Scala scale files (.scl). Select one in Finder and press Space." = "为 Scala 音阶文件（.scl）提供 Quick Look 预览。在访达中选择文件并按空格键。";
+"Quick Look extension is registered" = "Quick Look 扩展已注册";
+"Quick Look extension is not registered yet" = "Quick Look 扩展尚未注册";
+"You can quit this app now. Keep it installed, though: the extension lives inside it. If previews don't appear, turn on “Xen Scale Preview” under Quick Look in System Settings › Extensions, then click Reset Quick Look." = "现在可以退出此 App，但请保持安装：扩展包含在其中。如果没有显示预览，请在“系统设置”›“扩展”的 Quick Look 中打开“Xen Scale Preview”，然后点按“重置 Quick Look”。";
+"Extension Settings…" = "扩展设置…";
+"Reset Quick Look" = "重置 Quick Look";
+"Quit" = "退出";
