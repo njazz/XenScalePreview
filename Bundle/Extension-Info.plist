@@ -28,7 +28,9 @@
 			<true/>
 			<key>QLSupportedContentTypes</key>
 			<array>
-				<string>local.xen-scale-preview.scl</string>
+				<string>com.alexnadzharov.xenscalepreview.scl</string>
+				<string>com.marcussatellite.wilsonic.scl</string>
+				<string>com.modartt.document.scl</string>
 			</array>
 			<key>QLSupportsSearchableItems</key>
 			<false/>

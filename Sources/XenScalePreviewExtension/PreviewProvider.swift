@@ -1,5 +1,6 @@
 // One Quick Look data-based preview extension for macOS and iOS: both use QLPreviewProvider and
 // QLPreviewReply (iOS 15+ in QuickLook, macOS 12+ in QuickLookUI), so the source is shared.
+// The preview is a static page (no scripts, no sound); the playable keyboard lives in the apps (ViewerUI).
 import Foundation
 import UniformTypeIdentifiers
 import SclCore

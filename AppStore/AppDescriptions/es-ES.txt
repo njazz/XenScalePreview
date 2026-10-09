@@ -1,0 +1,11 @@
+Vista previa de Quick Look no oficial para archivos de escalas microtonales Scala (.scl) en iOS/iPadOS
+
+Selecciona un archivo .scl en Archivos, Mail o Mensajes.
+
+La vista previa se divide en dos paneles, o se apila en un teléfono:
+
+Izquierda: el nombre del archivo, la descripción y un resumen (número de notas, periodo, tamaños de paso, detección de divisiones iguales). Debajo vienen una rueda de alturas y un teclado de un periodo. Cada grado ocupa el espacio hasta la mitad del camino hacia sus vecinos, de modo que el ancho de las cuñas y de las teclas sigue el espaciado real de las alturas. Un grado se dibuja como tecla negra cuando su altura 12-TET más cercana es do#, re#, fa#, sol# o la#. Las etiquetas de la rueda muestran los cents, sin redondear tal como están escritos en el archivo, o con 3 decimales para las razones. Por último, una tabla de cada grado con su valor, cents, paso y la nota 12-TET más cercana.
+
+Derecha: el propio archivo como código fuente de solo lectura con números de línea. Los comentarios, la descripción, el número de notas y los valores de altura aparecen resaltados, y una línea que no se puede analizar aparece subrayada.
+
+La propia aplicación instala las extensiones de Quick Look y también permite escuchar una escala con osciladores de onda sinusoidal.

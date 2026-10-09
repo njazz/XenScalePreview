@@ -1,0 +1,39 @@
+# fastlane snapshot configuration — docs: https://docs.fastlane.tools/actions/snapshot/
+# Paths are relative to the repo root (fastlane runs lanes from the parent of this folder).
+# The project and the XenScalePreviewUITests scheme are generated from project.yml by Scripts/gen_project.sh.
+project("XenScalePreview.xcodeproj")
+scheme("XenScalePreviewUITests")
+
+# App Store Connect only needs the largest iPhone + iPad sizes; smaller ones are scaled.
+# Names must match `xcrun simctl list devices available` exactly (run Scripts/check_screenshots.sh).
+devices([
+  "iPhone 18 Pro",              # 1206x2622: required "Dynamic Island (medium)" class
+  "iPad Pro 13-inch (M5)"       # 2064x2752: required iPad 13" class  
+])
+
+# "iPhone 18 Pro Max",          # 1320x2868: optional "Dynamic Island (large)" class, the fallback for the medium one
+
+languages([
+  "en-US",
+  "de-DE",
+  "fr-FR",
+  "it",
+  "es-ES",
+  "ja",
+  "zh-Hans"
+])
+
+output_directory("./fastlane/screenshots")
+clear_previous_screenshots(true)
+override_status_bar(true)       # 9:41, full battery, full signal
+skip_open_summary(true)
+erase_simulator(false)
+number_of_retries(1)
+
+# --- robustness / diagnostics -------------------------------------------------------------------------------
+concurrent_simulators(false)    # boot and test one device at a time; parallel boots are a common source of random failures
+derived_data_path("./build/dd") # same DerivedData as the build scripts, so nothing lands in ~/Library
+buildlog_path("./build/snapshot-logs")  # the full xcodebuild log; read it when a run fails
+# No signing is needed to run UI tests on a Simulator, and it avoids "requires a development team" errors.
+# Override with SNAP_XCARGS="DEVELOPMENT_TEAM=ABCDE12345" if you really want a signed build.
+xcargs(ENV.fetch("SNAP_XCARGS", "CODE_SIGNING_ALLOWED=NO"))

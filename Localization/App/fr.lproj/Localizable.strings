@@ -11,3 +11,11 @@
 "Extension Settings…" = "Réglages de l’extension…";
 "Reset Quick Look" = "Réinitialiser Quick Look";
 "Quit" = "Quitter";
+"Open File…" = "Ouvrir un fichier…";
+"Open Folder…" = "Ouvrir un dossier…";
+"Close" = "Fermer";
+"Folder" = "Dossier";
+"Refresh" = "Actualiser";
+"Choose a folder to browse its scales." = "Choisissez un dossier pour parcourir ses gammes.";
+"No scale files (.scl) in this folder." = "Aucun fichier de gamme (.scl) dans ce dossier.";
+"Open a scale file or a folder, or drop one here." = "Ouvrez un fichier de gamme ou un dossier, ou déposez-le ici.";

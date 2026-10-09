@@ -9,15 +9,17 @@
 import Foundation
 
 public enum Scl {
-    /// Renders an .scl file as a self-contained HTML page. Quick Look runs no JavaScript in previews,
-    /// so the wheel and the keyboard are static SVG built here.
-    public static func html(from data: Data, fileName: String? = nil) -> String {
+    /// Renders an .scl file as a self-contained HTML page. The wheel and the keyboard are static SVG built here.
+    /// With `interactive` the page also carries the small sine synth (audio switch, octave, playable keyboard),
+    /// which needs a web view with JavaScript on. Data-based Quick Look previews run no scripts, so use it only from views.
+    public static func html(from data: Data, fileName: String? = nil, interactive: Bool = false,
+                            reference: Double = 440, octave: Int = 0) -> String {
         guard data.count <= 4_000_000 else {
             var s = Scale()
             s.error = tr("err.tooLarge", data.count / 1_000_000)
-            return render(s, fileName: fileName)
+            return render(s, fileName: fileName, interactive: interactive, reference: reference, octave: octave)
         }
-        return render(parse(decode(data)), fileName: fileName)
+        return render(parse(decode(data)), fileName: fileName, interactive: interactive, reference: reference, octave: octave)
     }
 }
 
@@ -195,7 +197,7 @@ func cleanCents(_ tok: String) -> String {
 
 // MARK: - HTML
 
-func render(_ s: Scale, fileName: String?) -> String {
+func render(_ s: Scale, fileName: String?, interactive: Bool = false, reference: Double = 440, octave: Int = 0) -> String {
     let n = s.pitches.count
     let periodPitch = s.pitches.last
     let period = (periodPitch?.cents ?? 0) > 1e-6 ? periodPitch!.cents : 1200
@@ -231,14 +233,14 @@ func render(_ s: Scale, fileName: String?) -> String {
     let centerLines = [periodLabel.map { tr("period", $0) }].compactMap { $0 }
     let body = s.lines.isEmpty && s.error != nil ? "" : """
         <div class="wheel">\(wheelSVG(ring, period: period, topLabel: periodLabel, count: n, extra: centerLines))</div>
-        <h2>\(esc(tr("onePeriod")))</h2>
-        <div class="piano">\(pianoSVG(degs, period: period))</div>
+        \(interactive ? synthHeader(reference: reference, octave: octave) : "<h2>\(esc(tr("onePeriod")))</h2>")
+        <div class="piano\(interactive ? " live" : "")">\(pianoSVG(degs, period: period))</div>
         <h2>\(esc(tr("degrees")))</h2>
         \(table(degs))
         """
 
     return """
-    <!doctype html><html lang="\(uiLanguage)"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>\(esc(title))</title><style>\(css)</style></head><body>
+    <!doctype html><html lang="\(uiLanguage)"><head><meta charset="utf-8"><meta name="viewport" content="\(interactive ? "width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" : "width=device-width,initial-scale=1")"><title>\(esc(title))</title><style>\(css)\(interactive ? appCSS : "")</style></head><body>
     <main class="left">
     <h1>\(esc(title))</h1>\(desc)
     <div class="chips">\(chipHTML)</div>\(errorHTML)
@@ -248,6 +250,7 @@ func render(_ s: Scale, fileName: String?) -> String {
     <div class="srchead"><span>\(esc(tr("source")))</span><span class="mut">\(esc(trN("lines", s.lines.count)))</span></div>
     \(source(s))
     </section>
+    \(interactive ? "<script>\(synthScript)</script>" : "")
     </body></html>
     """
 }
@@ -363,6 +366,11 @@ func tip(_ d: Degree) -> String {
 
 /// One period as a keyboard: key widths follow pitch spacing. Every degree owns the span halfway to its
 /// neighbours; white keys additionally share the lower half among themselves, like a piano.
+/// The pitches a key plays, in cents above 1/1 (read by the synth script).
+func dataC(_ ds: [Degree]) -> String {
+    ds.isEmpty ? "" : " data-c=\"\(ds.map { String(format: "%.4f", $0.cents) }.joined(separator: ","))\""
+}
+
 func pianoSVG(_ degs: [Degree], period P: Double) -> String {
     if degs.count - 1 < 12 { return gridPianoSVG(degs, period: P) }   // few degrees: a full 12-field keyboard
     let W = 1000.0, H = 150.0, HB = 94.0
@@ -386,7 +394,7 @@ func pianoSVG(_ degs: [Degree], period P: Double) -> String {
     var out = "<svg viewBox=\"0 0 \(f(W)) \(f(H + 2))\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">"
     for (d, s) in zip(whites, slots(whites)) {
         let x0 = X(s.lo), w = X(s.hi) - x0, cx = x0 + w / 2
-        out += "<rect class=\"kw\" x=\"\(f(x0 + 0.75))\" y=\"1\" width=\"\(f(max(w - 1.5, 0.5)))\" height=\"\(f(H))\" rx=\"5\"><title>\(esc(tip(d)))</title></rect>"
+        out += "<rect class=\"kw\"\(dataC([d])) x=\"\(f(x0 + 0.75))\" y=\"1\" width=\"\(f(max(w - 1.5, 0.5)))\" height=\"\(f(H))\" rx=\"5\"><title>\(esc(tip(d)))</title></rect>"
         if d.index == 0 || (d.index == lastIndex && lastIndex > 0) {
             out += "<circle class=\"af\" cx=\"\(f(cx))\" cy=\"\(f(H - 34))\" r=\"5\"/>"
         }
@@ -394,7 +402,7 @@ func pianoSVG(_ degs: [Degree], period P: Double) -> String {
     }
     for (d, s) in zip(keys, slots(keys)) where d.black {
         let x0 = X(s.lo), w = X(s.hi) - x0, inset = min(3, w * 0.12), cx = x0 + w / 2
-        out += "<rect class=\"kb\" x=\"\(f(x0 + inset))\" y=\"1\" width=\"\(f(max(w - 2 * inset, 0.5)))\" height=\"\(f(HB))\" rx=\"4\"><title>\(esc(tip(d)))</title></rect>"
+        out += "<rect class=\"kb\"\(dataC([d])) x=\"\(f(x0 + inset))\" y=\"1\" width=\"\(f(max(w - 2 * inset, 0.5)))\" height=\"\(f(HB))\" rx=\"4\"><title>\(esc(tip(d)))</title></rect>"
         if d.index == 0 || (d.index == lastIndex && lastIndex > 0) {
             out += "<circle class=\"af\" cx=\"\(f(cx))\" cy=\"\(f(HB - 30))\" r=\"5\"/>"
         }
@@ -428,14 +436,14 @@ func gridPianoSVG(_ degs: [Degree], period P: Double) -> String {
     var out = "<svg viewBox=\"0 0 \(f(W)) \(f(H + 2))\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\">"
     for (i, pc) in whitePCs.enumerated() {
         let x0 = Double(i) * w
-        out += "<rect class=\"kw\" x=\"\(f(x0 + 0.75))\" y=\"1\" width=\"\(f(w - 1.5))\" height=\"\(f(H))\" rx=\"5\">\(titles(pc))</rect>"
+        out += "<rect class=\"kw\"\(dataC(onKey[pc] ?? [])) x=\"\(f(x0 + 0.75))\" y=\"1\" width=\"\(f(w - 1.5))\" height=\"\(f(H))\" rx=\"5\">\(titles(pc))</rect>"
         out += marks(pc, dotY: H - 34, labelY: H - 12, cx: x0 + w / 2, labelClass: "kl")
     }
     let bw = w * 0.6
     for pc in blackClasses.sorted() {
         let boundary = Double(whitePCs.firstIndex(of: pc - 1)! + 1) * w     // black key sits between its white neighbours
         let x0 = boundary - bw / 2
-        out += "<rect class=\"kb\" x=\"\(f(x0))\" y=\"1\" width=\"\(f(bw))\" height=\"\(f(HB))\" rx=\"4\">\(titles(pc))</rect>"
+        out += "<rect class=\"kb\"\(dataC(onKey[pc] ?? [])) x=\"\(f(x0))\" y=\"1\" width=\"\(f(bw))\" height=\"\(f(HB))\" rx=\"4\">\(titles(pc))</rect>"
         out += marks(pc, dotY: HB - 30, labelY: HB - 10, cx: boundary, labelClass: "kbl")
     }
     return out + "</svg>"
@@ -491,6 +499,14 @@ func esc(_ s: String) -> String {
 }
 
 // Neutral greys and plain black/white keys; the only colour is the system accent.
+/// Extra rules for the app's page (the one with the synth): fixed scale, and no text selection, so playing the keyboard
+/// (double-clicks, drags) never selects labels. The tuning box stays editable.
+let appCSS = """
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.piano.live,.piano.live svg,.piano.live rect{touch-action:none;-webkit-touch-callout:none}
+input{-webkit-user-select:text;user-select:text}
+"""
+
 let css = """
 :root{color-scheme:light dark;--bg:#fff;--fg:#1d1d1f;--mut:#86868b;--line:#e3e3e6;--panel:#f6f6f7;\
 --kw:#fff;--kb:#1d1d1f;--edge:#bdbdc2;--kbt:#a1a1a6}
@@ -542,6 +558,22 @@ border-bottom:1px solid var(--line);font-weight:600;font-size:12px}
 .tx{white-space:pre;tab-size:4}
 .c{color:var(--mut);font-style:italic}.d{font-weight:700}.r{color:var(--mut)}.x{color:var(--mut);opacity:.6}
 .e{text-decoration:underline wavy;font-weight:700}
+.phead{display:flex;align-items:center;justify-content:space-between;margin:22px 0 8px}.phead h2{margin:0}
+.synth{display:flex;align-items:center;gap:4px}
+.synth button{-webkit-appearance:none;appearance:none;border:1px solid var(--line);background:transparent;color:var(--fg);\
+border-radius:6px;height:22px;min-width:24px;padding:0 6px;font:inherit;line-height:1;display:inline-flex;align-items:center;\
+justify-content:center;cursor:pointer}
+.synth button.ac{color:#007aff;color:AccentColor;color:-apple-system-control-accent;border-color:currentColor}
+.synth button:disabled{opacity:.35;cursor:default}
+.synth{flex-wrap:wrap;justify-content:flex-end}.phead{gap:6px}
+.synth .tune{display:inline-flex;align-items:center;gap:4px;margin-left:8px;color:var(--mut);white-space:nowrap}
+.synth .ref{width:5.2em;height:22px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--fg);\
+font:inherit;text-align:right;padding:0 6px;font-variant-numeric:tabular-nums}
+.synth svg{width:15px;height:15px;display:block}.synth .i-on{display:none}.synth .is-on .i-on{display:block}.synth .is-on .i-off{display:none}
+.synth .oval{min-width:2.2em;text-align:center;font-variant-numeric:tabular-nums}
+.piano.live{-webkit-user-select:none;user-select:none;touch-action:none}.piano.live [data-c]{cursor:pointer}
+.piano.live text,.piano.live circle{pointer-events:none}
+.piano rect.down{fill:#007aff;fill:AccentColor;fill:-apple-system-control-accent}
 @media(max-width:760px){html,body{height:auto}body{display:block}.left,.right{overflow:visible}\
 .right{border-left:0;border-top:1px solid var(--line)}.srchead{position:static}}
 """

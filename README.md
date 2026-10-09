@@ -2,8 +2,11 @@
 
 **Unofficial Quick Look preview for Scala microtonal scale files (`.scl`), for macOS and iOS / iPadOS.**
 
-Select an `.scl` file in Finder and press Space, or tap one in Files, Mail or Messages. The preview is split in two
-(stacked on a phone):
+![image](screenshot.png)
+
+Select an `.scl` file in Finder and press Space, or tap one in Files, Mail or Messages. 
+
+The preview is split in two panes or stacked on a phone:
 
 - **Left:** the file name, description and a summary (note count, period, step sizes, equal-division
   detection). Below that come a pitch wheel and a one-period keyboard. Each degree owns the span halfway to
@@ -21,6 +24,8 @@ The app **Xen Scale Preview** carries the Quick Look extension. It's a Swift pac
 for macOS 12+ and iOS 16+, with no dependencies. The iOS app can also open a scale directly, which is handy for
 testing. The macOS and iOS apps share one bundle ID, so they can ship as a single universal App Store purchase.
 
+> The file type identifiers for .scl that other apps declare are listed in this project only so that Quick Look previews work for files those apps own. This project is not affiliated with or endorsed by their owners, and all names and trademarks are the property of their respective owners.
+> 
 > Not affiliated with or endorsed by the authors of Scala. macOS, iOS, Finder and Quick Look are trademarks
 > of Apple Inc.
 
@@ -28,18 +33,18 @@ testing. The macOS and iOS apps share one bundle ID, so they can ship as a singl
 
 | Script | What it builds | Needs |
 | --- | --- | --- |
-| `./build_macos.sh` | `dist/XenScalePreview.zip`, the macOS app (ad-hoc signed) | Command Line Tools |
-| `./build_macos.sh --archive` | signed Xcode archive + export in `dist/macos/` | Xcode, XcodeGen, `TEAM_ID` |
-| `./build_ios.sh` | `dist/XenScalePreview-iOS-Simulator.zip`, unsigned, for the Simulator | Xcode, XcodeGen |
-| `./build_ios.sh --archive` | signed archive + `.ipa` export in `dist/ios/` | Xcode, XcodeGen, `TEAM_ID` |
-| `TEAM_ID=… BUNDLE_ID=… ./build_appstore.sh ios\|macos\|all` | App Store archives and exports (`.ipa`, `.pkg`); `--upload` sends them to App Store Connect | Xcode, XcodeGen, `TEAM_ID`, your own `BUNDLE_ID` |
-| `./gen_project.sh` | `XenScalePreview.xcodeproj` with all four targets, for working in Xcode (see below) | XcodeGen |
+| `Scripts/build_macos.sh` | `dist/XenScalePreview.zip`, the macOS app (ad-hoc signed) | Command Line Tools |
+| `Scripts/build_macos.sh --archive` | signed Xcode archive + export in `dist/macos/` | Xcode, XcodeGen, `TEAM_ID` |
+| `Scripts/build_ios.sh` | `dist/XenScalePreview-iOS-Simulator.zip`, unsigned, for the Simulator | Xcode, XcodeGen |
+| `Scripts/build_ios.sh --archive` | signed archive + `.ipa` export in `dist/ios/` | Xcode, XcodeGen, `TEAM_ID` |
+| `TEAM_ID=… BUNDLE_ID=… Scripts/build_appstore.sh ios\|macos\|all` | App Store archives and exports (`.ipa`, `.pkg`); `--upload` sends them to App Store Connect | Xcode, XcodeGen, `TEAM_ID`, your own `BUNDLE_ID` |
+| `Scripts/gen_project.sh` | `XenScalePreview.xcodeproj` with all targets (apps, extensions, UI tests), for working in Xcode (see below) | XcodeGen |
 
 Install XcodeGen with `brew install xcodegen`.
 
 | Option | Default | Purpose |
 | --- | --- | --- |
-| `BUNDLE_ID=com.you.xen-scale-preview` | `local.xen-scale-preview` | App bundle ID; the extension gets `<id>.quicklook` |
+| `BUNDLE_ID=com.you.xen-scale-preview` | `com.alexnadzharov.xenscalepreview` | App bundle ID; the extension gets `<id>.quicklook` |
 | `VERSION=1.0.0` | `1.0` | Version shown in Finder / App Store |
 | `TEAM_ID=ABCDE12345` | none | Apple Developer team, required for `--archive` |
 | `EXPORT_METHOD=…` | `developer-id` (macOS), `development` (iOS) | Also `app-store-connect`, `mac-application`, `release-testing` |
@@ -51,9 +56,9 @@ For App Store builds use `--archive` with `EXPORT_METHOD=app-store-connect` and 
 ### Install on macOS
 
 ```sh
-./install_mac.sh                 # build, sign (ad-hoc), install to ~/Applications, register
+Scripts/install_mac.sh                 # build, sign (ad-hoc), install to ~/Applications, register
 qlmanage -p Examples/ji-5-limit.scl
-./install_mac.sh --uninstall
+Scripts/install_mac.sh --uninstall
 ```
 
 Or download `XenScalePreview.zip` from [Releases](../../releases), move the app to `/Applications` and open it
@@ -63,15 +68,15 @@ installed, because the extension lives inside it.
 
 ### Install on iOS
 
-- **Simulator:** `./build_ios.sh`, then `xcrun simctl install booted build/dd/Build/Products/Release-iphonesimulator/XenScalePreview.app`.
+- **Simulator:** `Scripts/build_ios.sh`, then `xcrun simctl install booted build/dd/Build/Products/Release-iphonesimulator/XenScalePreview.app`.
   Add `Examples/*.scl` by dragging them onto the Simulator, then preview them in Files.
-- **Device:** `TEAM_ID=… ./build_ios.sh --archive`, or open `XenScalePreview.xcodeproj` after `./gen_project.sh`,
+- **Device:** `TEAM_ID=… Scripts/build_ios.sh --archive`, or open `XenScalePreview.xcodeproj` after `Scripts/gen_project.sh`,
   pick the **XenScalePreview-iOS** scheme and run it.
 
 ### Open in Xcode
 
 ```sh
-TEAM_ID=ABCDE12345 ./gen_project.sh --open
+TEAM_ID=ABCDE12345 Scripts/gen_project.sh --open
 ```
 
 Pick the **XenScalePreview-iOS** or **XenScalePreview-macOS** scheme and run. The project is generated next to `Package.swift` from
@@ -80,6 +85,7 @@ Pick the **XenScalePreview-iOS** or **XenScalePreview-macOS** scheme and run. Th
 iOS destination, every target still compiles, because the macOS-only host app has an iOS stub.)
 
 For the App Store see [AppStore/README.md](AppStore/README.md): listing draft, review pitfalls and screenshot sizes.
+Automated screenshots (`fastlane screenshots`) are described in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md).
 
 ## Develop without installing
 
@@ -87,28 +93,49 @@ For the App Store see [AppStore/README.md](AppStore/README.md): listing draft, r
 swift run scl2html Examples/31-EDO.scl > /tmp/s.html && open /tmp/s.html
 ```
 
-Quick Look runs no JavaScript in HTML previews, so everything (wheel, keyboard, highlighting) is static
-HTML and SVG generated in Swift. What you see in Safari is what Quick Look shows.
+The wheel, keyboard and highlighting are static HTML and SVG generated in Swift, so what you see in Safari is what
+Quick Look shows. The preview page also has a small sine synth (below). `scl2html` prints the static page without it.
+
+## The app: viewer and synth
+
+Quick Look previews are static: they can't play sound, and on macOS they don't forward clicks. So the playable part
+lives in the app. Open the app and use the folder button for a sidebar of the `.scl` files in a folder (subfolders
+included), or open a single file; drop a file or folder on the window, or use Quick Look's "Open with" button
+(macOS) or the share sheet's "Open in…" (iOS). The close button returns to the start screen.
+
+Above the keyboard, on the right: an audio switch (on by default), an octave stepper (-4 to +4) and a tuning box
+(the frequency of A4, 440 Hz by default; 100 to 2000). Clicking or touching a key plays its pitch; several keys or fingers
+play together, and sliding across keys plays them in turn. Only the keyboard triggers sound. It is plain Web Audio in
+the page (`Sources/SclCore/Synth.swift`): one sine oscillator per pitch, 100 ms fade in and out. 1/1 is the keyboard's
+C: middle C at octave 0, nine semitones below A4, so with a 12-tone scale the A key sounds the reference. Each octave
+step is a real 2:1 octave. The app remembers octave and tuning across scales. On iOS the app plays through the
+playback audio session, so the silent switch doesn't mute it. While a file loads, a spinner covers the preview.
+
+`Sources/ViewerUI` is the window, shared by both apps; the app targets are thin wrappers around it. macOS remembers the
+last folder through a security-scoped bookmark; iOS does the same with a plain bookmark.
 
 ## Layout
 
 ```
-Package.swift                                    SwiftPM: SclCore library + macOS executables
+Package.swift                                    SwiftPM: SclCore + ViewerUI libraries, macOS executables
 project.yml                                      XcodeGen spec: iOS + macOS app and extension targets
 Sources/
   SclCore/Scl.swift                              .scl parser + HTML/SVG renderer (all the real logic)
-  XenScalePreviewExtension/PreviewProvider.swift Quick Look extension, shared by macOS and iOS
+  SclCore/Synth.swift, L10n.swift                synth strip + script, preview-page translations
+  ViewerUI/                                      app window: sidebar, folder scan, web view, open/close (iOS + macOS)
+  XenScalePreviewExtension/PreviewProvider.swift Quick Look extension (static page), shared by macOS and iOS
   XenScalePreviewExtension/main.swift            SwiftPM only: calls NSExtensionMain (no .appex product type)
-  XenScalePreview/App.swift                      macOS host app: registers the extension, shows status
+  XenScalePreview/App.swift                      macOS app (thin wrapper around ViewerUI)
   scl2html/main.swift                            command-line tool for testing
-iOS/App.swift                                    iOS host app: info screen + open-a-file preview
+iOS/App.swift                                    iOS app (thin wrapper around ViewerUI)
 Bundle/                                          Info.plists, entitlements, privacy manifest, macOS AppIcon.iconset
 AppStore/  Tools/  PRIVACY.md                    store checklist, screenshot sizing tool, privacy policy
 Localization/App/                                host-app strings, one <lang>.lproj each
 Icon/                                            icon source (SVG), PNGs, Xcode asset catalog; make_icon.py + render.js
 Examples/                                        12-TET, 31-EDO, 5-limit JI, Bohlen-Pierce
-build_macos.sh  build_ios.sh  build_appstore.sh  gen_project.sh     build scripts
-install_mac.sh                                   build_macos.sh + install + register
+Scripts/                                         build_macos.sh, build_ios.sh, build_appstore.sh, gen_project.sh, install_mac.sh,
+                                                 clean.sh, common.sh (shared), setup_screenshots.sh, check_screenshots.sh
+fastlane/  UITests/  docs/SCREENSHOTS.md         automated App Store screenshots (fastlane snapshot): see docs/SCREENSHOTS.md
 .github/workflows/build.yml                      CI: macOS app, iOS Simulator app, release asset on v* tags
 ```
 
@@ -143,7 +170,7 @@ and that line is underlined in the source view.
 - **No preview on macOS:** open the app and click **Reset Quick Look**. Then check that **Xen Scale Preview** is
   turned on under Quick Look in System Settings › Extensions (the app's **Extension Settings…** button).
 - **Plain-text preview instead of the wheel:** run `mdls -name kMDItemContentType file.scl` (macOS). It should
-  print `local.xen-scale-preview.scl`. If another app (a synth, a tuning tool, a code previewer) has claimed `.scl`
+  print `com.alexnadzharov.xenscalepreview.scl`. If another app (a synth, a tuning tool, a code previewer) has claimed `.scl`
   under a different identifier, add that identifier to `QLSupportedContentTypes` in `Bundle/Extension-Info.plist`
   and rebuild.
 - **No preview on iOS:** the file type must not conform to `public.plain-text`, or iOS can pick its built-in text
@@ -151,7 +178,7 @@ and that line is underlined in the source view.
   system-owned file types are reportedly skipped, so keep the custom type. Reinstalling the app makes iOS
   re-register the extension.
 - **Works on one iOS device but not another, or the in-app preview works but Files shows plain text:** open the file with
-  **Open…** in the app and read the **File type** line at the bottom. If it isn't `local.xen-scale-preview.scl`, another
+  **Open…** in the app and read the **File type** line at the bottom. If it isn't `com.alexnadzharov.xenscalepreview.scl`, another
   app has claimed `.scl`. Add that identifier to `QLSupportedContentTypes` in `Bundle/Extension-Info.plist`, rebuild, and
   reinstall. Also compare iOS versions: see the iOS 27 note above.
 - **Is the extension registered (macOS)?** `pluginkit -mv -p com.apple.quicklook.preview | grep -i xen`

@@ -1,0 +1,41 @@
+default_platform(:ios)
+
+REPO_ROOT = File.expand_path("..", __dir__)
+
+platform :ios do
+  # Screenshot lanes need the generated Xcode project, including the XenScalePreviewUITests target and scheme
+  # (both come from project.yml). Regenerating is cheap and guarantees they exist and are current.
+  # Set SKIP_GEN_PROJECT=1 to skip it.
+  before_all do |lane|
+    if %i[screenshots framed].include?(lane) && ENV["SKIP_GEN_PROJECT"].to_s.empty?
+      sh(File.join(REPO_ROOT, "Scripts", "gen_project.sh"))
+    end
+  end
+
+  desc "Check the machine and project for screenshot problems, without running any tests"
+  lane :doctor do
+    sh(File.join(REPO_ROOT, "Scripts", "check_screenshots.sh"))
+  end
+
+  desc "Capture App Store screenshots on all simulators/languages in Snapfile"
+  lane :screenshots do
+    capture_screenshots
+  end
+
+  desc "Capture screenshots and add device frames + captions (needs Framefile.json)"
+  lane :framed do
+    capture_screenshots
+    frame_screenshots(white: true)
+  end
+
+  desc "Upload screenshots (only) to App Store Connect"
+  lane :upload_screenshots do
+    deliver(
+      skip_binary_upload: true,
+      skip_metadata: true,
+      overwrite_screenshots: true,
+      screenshots_path: "./fastlane/screenshots",
+      force: true
+    )
+  end
+end
