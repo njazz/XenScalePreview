@@ -24,7 +24,7 @@ jobs:
       - name: Build app (universal, ad-hoc signed)
         run: |
           if [[ "$GITHUB_REF_TYPE" == tag ]]; then VERSION="${GITHUB_REF_NAME#v}"; else VERSION=0.0.0; fi
-          UNIVERSAL=1 VERSION="$VERSION" ./build_macos.sh
+          UNIVERSAL=1 VERSION="$VERSION" ./Scripts/build_macos.sh
 
       - uses: actions/upload-artifact@v4
         with:
@@ -44,7 +44,7 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
       - name: Build for the iOS Simulator (unsigned)
-        run: ./build_ios.sh
+        run: ./Scripts/build_ios.sh
       - uses: actions/upload-artifact@v4
         with:
           name: XenScalePreview-iOS-Simulator
