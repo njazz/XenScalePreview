@@ -11,10 +11,10 @@ BLACK = {1, 3, 6, 8, 10}
 black = [round(d * 1200 / N / 100) % 12 in BLACK for d in range(N)]
 
 BODY = 824.0                       # macOS icon body inside the 1024 canvas; iOS icons fill the whole canvas
-RING = 720.0                       # outer diameter of the ring on the macOS icon: ~87% of the body, centred with margins
+RING = 670.0                       # outer diameter of the ring on the macOS icon: ~87% of the body, centred with margins
 INNER = 0.56                       # inner radius as a fraction of the outer radius (the wheel's hole)
 GAP = 7.0                          # gap between wedges, in pixels of the 1024 canvas (macOS size)
-WHITE, DARK = "#f6efe1", "#14161b"
+WHITE, DARK = "#f6efe1", "#5b5654"
 
 def build(mac: bool) -> str:
     k = 1.0 if mac else 1024 / BODY                   # same proportion of the visible icon on both platforms
@@ -48,7 +48,7 @@ def build(mac: bool) -> str:
 <defs>
 {body}
 {shadow}
-<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6d7585"/><stop offset="1" stop-color="#454b59"/></linearGradient>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#202020"/><stop offset="1" stop-color="#202030"/></linearGradient>
 </defs>
 {outer}
 {wedges}

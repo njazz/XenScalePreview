@@ -2,8 +2,11 @@
 
 **Unofficial Quick Look preview for Scala microtonal scale files (`.scl`), for macOS and iOS / iPadOS.**
 
-Select an `.scl` file in Finder and press Space, or tap one in Files, Mail or Messages. The preview is split in two
-(stacked on a phone):
+![image](screenshot.png)
+
+Select an `.scl` file in Finder and press Space, or tap one in Files, Mail or Messages. 
+
+The preview is split in two panes or stacked on a phone:
 
 - **Left:** the file name, description and a summary (note count, period, step sizes, equal-division
   detection). Below that come a pitch wheel and a one-period keyboard. Each degree owns the span halfway to
@@ -28,12 +31,12 @@ testing. The macOS and iOS apps share one bundle ID, so they can ship as a singl
 
 | Script | What it builds | Needs |
 | --- | --- | --- |
-| `./build_macos.sh` | `dist/XenScalePreview.zip`, the macOS app (ad-hoc signed) | Command Line Tools |
-| `./build_macos.sh --archive` | signed Xcode archive + export in `dist/macos/` | Xcode, XcodeGen, `TEAM_ID` |
-| `./build_ios.sh` | `dist/XenScalePreview-iOS-Simulator.zip`, unsigned, for the Simulator | Xcode, XcodeGen |
-| `./build_ios.sh --archive` | signed archive + `.ipa` export in `dist/ios/` | Xcode, XcodeGen, `TEAM_ID` |
-| `TEAM_ID=… BUNDLE_ID=… ./build_appstore.sh ios\|macos\|all` | App Store archives and exports (`.ipa`, `.pkg`); `--upload` sends them to App Store Connect | Xcode, XcodeGen, `TEAM_ID`, your own `BUNDLE_ID` |
-| `./gen_project.sh` | `XenScalePreview.xcodeproj` with all four targets, for working in Xcode (see below) | XcodeGen |
+| `Scripts/build_macos.sh` | `dist/XenScalePreview.zip`, the macOS app (ad-hoc signed) | Command Line Tools |
+| `Scripts/build_macos.sh --archive` | signed Xcode archive + export in `dist/macos/` | Xcode, XcodeGen, `TEAM_ID` |
+| `Scripts/build_ios.sh` | `dist/XenScalePreview-iOS-Simulator.zip`, unsigned, for the Simulator | Xcode, XcodeGen |
+| `Scripts/build_ios.sh --archive` | signed archive + `.ipa` export in `dist/ios/` | Xcode, XcodeGen, `TEAM_ID` |
+| `TEAM_ID=… BUNDLE_ID=… Scripts/build_appstore.sh ios\|macos\|all` | App Store archives and exports (`.ipa`, `.pkg`); `--upload` sends them to App Store Connect | Xcode, XcodeGen, `TEAM_ID`, your own `BUNDLE_ID` |
+| `Scripts/gen_project.sh` | `XenScalePreview.xcodeproj` with all targets (apps, extensions, UI tests), for working in Xcode (see below) | XcodeGen |
 
 Install XcodeGen with `brew install xcodegen`.
 
@@ -51,9 +54,9 @@ For App Store builds use `--archive` with `EXPORT_METHOD=app-store-connect` and 
 ### Install on macOS
 
 ```sh
-./install_mac.sh                 # build, sign (ad-hoc), install to ~/Applications, register
+Scripts/install_mac.sh                 # build, sign (ad-hoc), install to ~/Applications, register
 qlmanage -p Examples/ji-5-limit.scl
-./install_mac.sh --uninstall
+Scripts/install_mac.sh --uninstall
 ```
 
 Or download `XenScalePreview.zip` from [Releases](../../releases), move the app to `/Applications` and open it
@@ -63,15 +66,15 @@ installed, because the extension lives inside it.
 
 ### Install on iOS
 
-- **Simulator:** `./build_ios.sh`, then `xcrun simctl install booted build/dd/Build/Products/Release-iphonesimulator/XenScalePreview.app`.
+- **Simulator:** `Scripts/build_ios.sh`, then `xcrun simctl install booted build/dd/Build/Products/Release-iphonesimulator/XenScalePreview.app`.
   Add `Examples/*.scl` by dragging them onto the Simulator, then preview them in Files.
-- **Device:** `TEAM_ID=… ./build_ios.sh --archive`, or open `XenScalePreview.xcodeproj` after `./gen_project.sh`,
+- **Device:** `TEAM_ID=… Scripts/build_ios.sh --archive`, or open `XenScalePreview.xcodeproj` after `Scripts/gen_project.sh`,
   pick the **XenScalePreview-iOS** scheme and run it.
 
 ### Open in Xcode
 
 ```sh
-TEAM_ID=ABCDE12345 ./gen_project.sh --open
+TEAM_ID=ABCDE12345 Scripts/gen_project.sh --open
 ```
 
 Pick the **XenScalePreview-iOS** or **XenScalePreview-macOS** scheme and run. The project is generated next to `Package.swift` from
@@ -80,6 +83,7 @@ Pick the **XenScalePreview-iOS** or **XenScalePreview-macOS** scheme and run. Th
 iOS destination, every target still compiles, because the macOS-only host app has an iOS stub.)
 
 For the App Store see [AppStore/README.md](AppStore/README.md): listing draft, review pitfalls and screenshot sizes.
+Automated screenshots (`fastlane screenshots`) are described in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md).
 
 ## Develop without installing
 
@@ -127,8 +131,9 @@ AppStore/  Tools/  PRIVACY.md                    store checklist, screenshot siz
 Localization/App/                                host-app strings, one <lang>.lproj each
 Icon/                                            icon source (SVG), PNGs, Xcode asset catalog; make_icon.py + render.js
 Examples/                                        12-TET, 31-EDO, 5-limit JI, Bohlen-Pierce
-build_macos.sh  build_ios.sh  build_appstore.sh  gen_project.sh     build scripts
-install_mac.sh                                   build_macos.sh + install + register
+Scripts/                                         build_macos.sh, build_ios.sh, build_appstore.sh, gen_project.sh, install_mac.sh,
+                                                 clean.sh, common.sh (shared), setup_screenshots.sh, check_screenshots.sh
+fastlane/  UITests/  docs/SCREENSHOTS.md         automated App Store screenshots (fastlane snapshot): see docs/SCREENSHOTS.md
 .github/workflows/build.yml                      CI: macOS app, iOS Simulator app, release asset on v* tags
 ```
 

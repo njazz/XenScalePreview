@@ -1,0 +1,11 @@
+Unofficial Quick Look preview for Scala microtonal scale files (.scl) for iOS/iPadOS
+
+Select an .scl file in Files, Mail or Messages.
+
+The preview is split in two panes or stacked on a phone:
+
+Left: the file name, description and a summary (note count, period, step sizes, equal-division detection). Below that come a pitch wheel and a one-period keyboard. Each degree owns the span halfway to its neighbours, so wedge and key widths follow the real pitch spacing. A degree is drawn as a black key when its nearest 12-TET pitch is C#, D#, F#, G# or A#. Wheel labels show cents, unrounded as written in the file, or to 3 decimals for ratios. Last comes a table of every degree with its value, cents, step and nearest 12-TET note.
+
+Right: the file itself as read-only source with line numbers. Comments, the description, the note count and pitch values are highlighted, and a line that fails to parse is underlined.
+
+The app itself installs the QuickLook extensions and also allows audio preview of a scale with sine wave oscillators.

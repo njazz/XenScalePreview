@@ -1,0 +1,11 @@
+Aperçu Quick Look non officiel pour les fichiers de gammes microtonales Scala (.scl) sur iOS/iPadOS
+
+Sélectionnez un fichier .scl dans Fichiers, Mail ou Messages.
+
+L'aperçu est divisé en deux volets, ou empilé sur un téléphone :
+
+Gauche : le nom du fichier, la description et un résumé (nombre de notes, période, tailles des pas, détection des divisions égales). Viennent ensuite une roue des hauteurs et un clavier d'une période. Chaque degré occupe l'espace jusqu'à mi-chemin de ses voisins, de sorte que la largeur des secteurs et des touches suit l'écart réel entre les hauteurs. Un degré est dessiné comme une touche noire lorsque sa hauteur 12-TET la plus proche est do#, ré#, fa#, sol# ou la#. Les étiquettes de la roue indiquent les cents, non arrondis, tels qu'ils sont écrits dans le fichier, ou avec 3 décimales pour les rapports. Enfin, un tableau de chaque degré avec sa valeur, ses cents, son pas et la note 12-TET la plus proche.
+
+Droite : le fichier lui-même, en source en lecture seule avec numéros de ligne. Les commentaires, la description, le nombre de notes et les valeurs de hauteur sont mis en évidence, et une ligne qui ne peut pas être analysée est soulignée.
+
+L'application elle-même installe les extensions Quick Look et permet aussi d'écouter une gamme avec des oscillateurs à onde sinusoïdale.

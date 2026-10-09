@@ -1,0 +1,11 @@
+Inoffizielle Quick-Look-Vorschau für mikrotonale Scala-Skalendateien (.scl) für iOS/iPadOS
+
+Wähle eine .scl-Datei in Dateien, Mail oder Nachrichten aus.
+
+Die Vorschau ist in zwei Bereiche geteilt oder wird auf dem iPhone untereinander angeordnet:
+
+Links: der Dateiname, die Beschreibung und eine Zusammenfassung (Anzahl der Töne, Periode, Schrittgrößen, Erkennung gleichstufiger Teilungen). Darunter folgen ein Tonhöhenrad und eine Tastatur für eine Periode. Jede Stufe beansprucht den Bereich bis zur Hälfte des Abstands zu ihren Nachbarn, sodass die Breiten von Keilen und Tasten dem tatsächlichen Tonhöhenabstand entsprechen. Eine Stufe wird als schwarze Taste dargestellt, wenn ihre nächstgelegene 12-TET-Tonhöhe C#, D#, F#, G# oder A# ist. Die Beschriftungen des Rads zeigen Cent, ungerundet so, wie sie in der Datei stehen, bzw. bei Verhältnissen mit 3 Nachkommastellen. Zuletzt folgt eine Tabelle jeder Stufe mit Wert, Cent, Schritt und nächstgelegenem 12-TET-Ton.
+
+Rechts: die Datei selbst als schreibgeschützter Quelltext mit Zeilennummern. Kommentare, die Beschreibung, die Anzahl der Töne und die Tonhöhenwerte sind hervorgehoben, und eine Zeile, die sich nicht auswerten lässt, ist unterstrichen.
+
+Die App selbst installiert die Quick-Look-Erweiterungen und ermöglicht außerdem das Probehören einer Skala mit Sinus-Oszillatoren.

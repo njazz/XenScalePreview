@@ -1,14 +1,14 @@
 # XcodeGen spec: one Xcode project with the app and Quick Look extension for iOS and macOS.
 # The project is generated next to Package.swift, so "." is the package and all paths are relative to the repo root.
-# Generate it with ./gen_project.sh (reads BUNDLE_ID, VERSION, BUILD and TEAM_ID from the environment).
+# Generate it with Scripts/gen_project.sh (reads BUNDLE_ID, VERSION, BUILD and TEAM_ID from the environment).
 # The iOS and macOS apps share a bundle ID, so they can ship as one universal App Store purchase.
 name: XenScalePreview
 options:
   createIntermediateGroups: true
   developmentLanguage: en
   deploymentTarget:
-    iOS: "16.0"
-    macOS: "12.0"
+    iOS: "17.0"
+    macOS: "14.0"
 packages:
   XenScalePreview:
     path: .           # the Swift package (SclCore) in this folder, next to the generated project
@@ -96,3 +96,31 @@ targets:
         INFOPLIST_FILE: Bundle/Extension-Info.plist
         CODE_SIGN_ENTITLEMENTS: Bundle/Extension.entitlements
         ENABLE_HARDENED_RUNTIME: YES
+  # MARK: Screenshots (fastlane snapshot)
+  # UI-test bundle that fastlane drives. It lives here, in the spec, so every Scripts/gen_project.sh run (and every
+  # build script, which regenerates the project) keeps it. Patching the generated .xcodeproj by hand would be wiped.
+  XenScalePreviewUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: XenScalePreview-iOS
+    settings:
+      base:
+        PRODUCT_NAME: XenScalePreviewUITests
+        PRODUCT_BUNDLE_IDENTIFIER: ${BUNDLE_ID}.UITests
+        TEST_TARGET_NAME: XenScalePreview-iOS
+        GENERATE_INFOPLIST_FILE: YES      # the project default is NO (the app and extension ship their own plists)
+        TARGETED_DEVICE_FAMILY: "1,2"
+schemes:
+  # Shared scheme named in fastlane/Snapfile. It builds the iOS app and runs only the UI tests.
+  XenScalePreviewUITests:
+    build:
+      targets:
+        XenScalePreview-iOS: all
+        XenScalePreviewUITests: [test]
+    test:
+      targets:
+        - XenScalePreviewUITests
+      gatherCoverageData: false
