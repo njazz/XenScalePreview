@@ -114,6 +114,25 @@ targets:
         GENERATE_INFOPLIST_FILE: YES      # the project default is NO (the app and extension ship their own plists)
         TARGETED_DEVICE_FAMILY: "1,2"
 schemes:
+  # Once a spec defines any scheme, Xcode stops auto-creating the per-target ones, so every scheme the scripts and
+  # Xcode need is listed here: build_ios.sh / build_macos.sh / build_appstore.sh use XenScalePreview-iOS and -macOS.
+  # Scripts/gen_project.sh fails if one of them is missing from the generated project.
+  XenScalePreview-iOS:
+    build:
+      targets:
+        XenScalePreview-iOS: all
+  XenScalePreview-macOS:
+    build:
+      targets:
+        XenScalePreview-macOS: all
+  XenScalePreviewExtension-iOS:
+    build:
+      targets:
+        XenScalePreviewExtension-iOS: all
+  XenScalePreviewExtension-macOS:
+    build:
+      targets:
+        XenScalePreviewExtension-macOS: all
   # Shared scheme named in fastlane/Snapfile. It builds the iOS app and runs only the UI tests.
   XenScalePreviewUITests:
     build:
