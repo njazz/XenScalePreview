@@ -1,7 +1,3 @@
-// Wording of the preview page in the user's language. Only the app's own text is translated:
-// the document's description, comments and values are always shown exactly as written.
-// A table in code (instead of .strings resources) keeps the Quick Look extension free of bundle plumbing,
-// so it behaves the same under SwiftPM, the build scripts and Xcode. Keys use {0}, {1} … placeholders.
 import Foundation
 
 /// Language of the preview: the first of the user's preferred languages that has a translation, else English.

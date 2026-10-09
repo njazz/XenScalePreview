@@ -18,6 +18,8 @@
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>com.alexnadzharov.xenscalepreview.scl</string>
+				<string>com.marcussatellite.wilsonic.scl</string>
+				<string>com.modartt.document.scl</string>
 			</array>
 		</dict>
 	</array>
@@ -68,12 +70,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UTImportedTypeDeclarations</key>
+	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
+				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Scala Scale File</string>

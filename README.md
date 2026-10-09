@@ -24,6 +24,8 @@ The app **Xen Scale Preview** carries the Quick Look extension. It's a Swift pac
 for macOS 12+ and iOS 16+, with no dependencies. The iOS app can also open a scale directly, which is handy for
 testing. The macOS and iOS apps share one bundle ID, so they can ship as a single universal App Store purchase.
 
+> The file type identifiers for .scl that other apps declare are listed in this project only so that Quick Look previews work for files those apps own. This project is not affiliated with or endorsed by their owners, and all names and trademarks are the property of their respective owners.
+> 
 > Not affiliated with or endorsed by the authors of Scala. macOS, iOS, Finder and Quick Look are trademarks
 > of Apple Inc.
 
