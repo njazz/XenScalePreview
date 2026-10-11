@@ -34,7 +34,7 @@ testing. The macOS and iOS apps share one bundle ID, so they can ship as a singl
 
 ## Get it
 
-**Free:** download the latest macOS build from [Releases](link), or build from source.
+**Free:** download the latest macOS build from [Releases](https://github.com/njazz/XenScalePreview/releases), or build from source.
 
 **Support development:** the same app is available on the App Store.
 Buying it helps fund updates and gets you automatic installs and the iOS app.
