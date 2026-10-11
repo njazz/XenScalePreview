@@ -1,5 +1,7 @@
 # XenScalePreview
 
+[![Build](https://github.com/njazz/XenScalePreview/actions/workflows/build.yml/badge.svg)](https://github.com/njazz/XenScalePreview/actions/workflows/build.yml)
+
 **Unofficial Quick Look preview for Scala microtonal scale files (`.scl`), for macOS and iOS / iPadOS.**
 
 ![image](screenshot.png)
