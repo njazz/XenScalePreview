@@ -17,6 +17,10 @@
 # Output: dist/XenScalePreview-notarized.zip  (stapled, so it also passes Gatekeeper offline)
 set -euo pipefail
 
+# Automatic detect added
+SIGN_ID="$(security find-identity -v -p codesigning | grep 'Developer ID Application' | head -n 1 | sed -E 's/.*"([^"]+)".*/"\1"/')"
+export SIGN_ID
+
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPTS_DIR/.." && pwd)"
 
