@@ -1,6 +1,7 @@
 # XenScalePreview
 
 [![Build](https://github.com/njazz/XenScalePreview/actions/workflows/build.yml/badge.svg)](https://github.com/njazz/XenScalePreview/actions/workflows/build.yml)
+[![GitHub Pages](https://github.com/njazz/XenScalePreview/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/njazz/XenScalePreview/actions/workflows/deploy-pages.yml)
 
 **Unofficial Quick Look preview for Scala microtonal scale files (`.scl`), for macOS and iOS / iPadOS.**
 
@@ -30,6 +31,17 @@ testing. The macOS and iOS apps share one bundle ID, so they can ship as a singl
 > 
 > Not affiliated with or endorsed by the authors of Scala. macOS, iOS, Finder and Quick Look are trademarks
 > of Apple Inc.
+
+## Get it
+
+**Free:** download the latest macOS build from [Releases](link), or build from source.
+
+**Support development:** the same app is available on the App Store.
+Buying it helps fund updates and gets you automatic installs and the iOS app.
+
+<a href="https://apps.apple.com/us/app/xenscalepreview/id6820683570"><img src="app-store-badge.svg" height="40" alt="Download on the App Store"></a>
+
+[https://apps.apple.com/us/app/xenscalepreview/id6820683570](https://apps.apple.com/us/app/xenscalepreview/id6820683570)
 
 ## Build
 
