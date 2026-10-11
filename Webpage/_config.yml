@@ -1,0 +1,15 @@
+
+title: XenScalePreview
+description: Official website and support for XenScalePreview App
+
+# Replace "your-app" with your repository name.
+url: "https://njazz.github.io"
+baseurl: "/XenScalePreview"
+
+permalink: pretty
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
